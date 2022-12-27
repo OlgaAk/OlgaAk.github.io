@@ -25,6 +25,30 @@ const leg1 = [
 
 ]
 
+const leg2 = [
+    {
+        "x": 488,
+        "y": 515
+    },
+
+    {
+        "x": 488,
+        "y": 585
+    
+    },
+    {
+        "x": 558,
+        "y": 585
+    
+    },
+    {
+        "x": 558,
+        "y": 515
+    
+    },
+
+]
+
 // endPathBtn.addEventListener("click", () => {
 //     console.log(leg1)
 // })
@@ -58,23 +82,19 @@ img.onload = function (e) {
 
 
 
-let flipped = false;
+let flippedLeftLeg = false;
 
-const animate = () => {
+const animateLeftLeg = () => {
     setTimeout( () => {
     ctx.beginPath()
     for(let point of leg1) {
-
-        ctx.lineTo(point.x, point.y)
-
+       ctx.lineTo(point.x, point.y)
     }
 
     ctx.closePath()
-
     ctx.clip()
-  console.log(flipped)
 
- if (!flipped) {
+ if (!flippedLeftLeg) {
     ctx.save()
     ctx.scale(-1, 1);
     ctx.drawImage(img,0,0,img.width,img.height,0,0,-800,600);
@@ -84,18 +104,55 @@ const animate = () => {
     ctx.drawImage(img,0,0,img.width,img.height,0,0,800,600);
  }
    
-    flipped = !flipped
+    flippedLeftLeg = !flippedLeftLeg
 
-    window.requestAnimationFrame(animate)
+    window.requestAnimationFrame(animateLeftLeg)
     
 //ctx.scale(-1, 1);
     }, 500)
-
     
 }
 
 
-animate()
+animateLeftLeg()
+
+
+
+
+let flippedRightLeg = false;
+
+const animateRightLeg = () => {
+    setTimeout( () => {
+    ctx.beginPath()
+    for(let point of leg2) {
+       ctx.lineTo(point.x, point.y)
+  
+    }
+
+    ctx.closePath()
+    ctx.clip()
+
+console.log(flippedRightLeg)
+ if (!flippedRightLeg) {
+    ctx.save()
+    ctx.rotate(-1 * Math.PI / 180);
+    ctx.drawImage(img,0,0,img.width,img.height,0,0,800,600);
+    
+ } else {
+    ctx.restore()
+    ctx.drawImage(img,0,0,img.width,img.height,0,0,800,600);
+ }
+   
+ flippedRightLeg = !flippedRightLeg
+
+    window.requestAnimationFrame(animateRightLeg)
+    
+    }, 500)
+    
+}
+
+
+//animateRightLeg()
 
 
 window.addEventListener("resize", () => {
