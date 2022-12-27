@@ -77,6 +77,7 @@ img.onload = function (e) {
 // ctx.fill()
 
 // ctx.clip();
+animateLeftLeg()
 
 }
 
@@ -84,8 +85,8 @@ img.onload = function (e) {
 
 let flippedLeftLeg = false;
 
-const animateLeftLeg = () => {
-    setTimeout( () => {
+const animateLeftLeg = (callback) => {
+
     ctx.beginPath()
     for(let point of leg1) {
        ctx.lineTo(point.x, point.y)
@@ -93,36 +94,37 @@ const animateLeftLeg = () => {
 
     ctx.closePath()
     ctx.clip()
-
- if (!flippedLeftLeg) {
     ctx.save()
-    ctx.scale(-1, 1);
-    ctx.drawImage(img,0,0,img.width,img.height,0,0,-800,600);
-    
- } else {
-    ctx.restore()
-    ctx.drawImage(img,0,0,img.width,img.height,0,0,800,600);
- }
-   
-    flippedLeftLeg = !flippedLeftLeg
 
-    window.requestAnimationFrame(animateLeftLeg)
-    
-//ctx.scale(-1, 1);
-    }, 500)
-    
+    console.log('before transformLeftLeg')
+
+    setTimeout(() => {
+        ctx.scale(-1, 1);
+        ctx.drawImage(img,0,0,img.width,img.height,0,0,-800,600);
+      
+        setTimeout(() => {
+            ctx.restore()
+            ctx.drawImage(img,0,0,img.width,img.height,0,0,800,600);
+            window.requestAnimationFrame(animateLeftLeg)
+            console.log('after transformLeftLeg')
+        }, 400)
+       
+    }, 400)
+   
 }
 
 
-animateLeftLeg()
+//animateLeftLeg()
 
 
 
 
-let flippedRightLeg = false;
+
+
 
 const animateRightLeg = () => {
-    setTimeout( () => {
+   
+    ctx.save()
     ctx.beginPath()
     for(let point of leg2) {
        ctx.lineTo(point.x, point.y)
@@ -132,27 +134,25 @@ const animateRightLeg = () => {
     ctx.closePath()
     ctx.clip()
 
-console.log(flippedRightLeg)
- if (!flippedRightLeg) {
-    ctx.save()
+
     ctx.rotate(-1 * Math.PI / 180);
     ctx.drawImage(img,0,0,img.width,img.height,0,0,800,600);
     
- } else {
     ctx.restore()
-    ctx.drawImage(img,0,0,img.width,img.height,0,0,800,600);
- }
-   
- flippedRightLeg = !flippedRightLeg
-
-    window.requestAnimationFrame(animateRightLeg)
-    
-    }, 500)
     
 }
 
 
 //animateRightLeg()
+
+
+
+
+
+
+
+
+
 
 
 window.addEventListener("resize", () => {
