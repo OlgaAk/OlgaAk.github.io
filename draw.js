@@ -218,7 +218,7 @@ const saveCanvasImage = () => {
     const savedImage = canvas.toDataURL("image/jpg").replace("image/jpg", "image/octet-stream");
     console.log(savedImage)
     if (savedImage) {
-        saveCanvasImage = savedImage;
+        savedCanvasImage = savedImage;
     }
 }
 
