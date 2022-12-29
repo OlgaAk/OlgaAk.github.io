@@ -51,7 +51,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 ctx.canvas.width = window.innerWidth;
-ctx.canvas.height = window.innerHeight;
+ctx.canvas.height = window.innerHeight - palette.offsetHeight * 2;
 
 ctx.lineWidth = "5";
 ctx.strokeStyle = "green";
@@ -78,45 +78,45 @@ const drawNose = () => {
 };
 
 animateBtn.addEventListener("click", () => {
-    if(!drawMode) return
+  if (!drawMode) return;
   drawMode = false;
-  drawBtn.classList.remove("disabled")
-  animateBtn.classList.add("disabled")
-  palette.classList.add("hidden")
+  drawBtn.classList.remove("disabled");
+  animateBtn.classList.add("disabled");
+  palette.classList.add("hidden");
   animateLeftLeg();
   setTimeout(animateRightLeg, 100);
 });
 
 drawBtn.addEventListener("click", () => {
   drawMode = true;
-  drawBtn.classList.add("disabled")
-  animateBtn.classList.remove("disabled")
-  palette.classList.remove("hidden")
+  drawBtn.classList.add("disabled");
+  animateBtn.classList.remove("disabled");
+  palette.classList.remove("hidden");
   //   drawNose()
 });
 
 redBtn.addEventListener("click", () => {
   if (!drawMode) return;
   ctx.strokeStyle = "red";
-  redBtn.classList.add("active")
-  yellowBtn.classList.remove("active")
-  greenBtn.classList.remove("active")
+  redBtn.classList.add("active");
+  yellowBtn.classList.remove("active");
+  greenBtn.classList.remove("active");
 });
 
 yellowBtn.addEventListener("click", () => {
   if (!drawMode) return;
   ctx.strokeStyle = "yellow";
-  redBtn.classList.remove("active")
-  yellowBtn.classList.add("active")
-  greenBtn.classList.remove("active")
+  redBtn.classList.remove("active");
+  yellowBtn.classList.add("active");
+  greenBtn.classList.remove("active");
 });
 
 greenBtn.addEventListener("click", () => {
   if (!drawMode) return;
   ctx.strokeStyle = "green";
-  redBtn.classList.remove("active")
-  yellowBtn.classList.remove("active")
-  greenBtn.classList.add("active")
+  redBtn.classList.remove("active");
+  yellowBtn.classList.remove("active");
+  greenBtn.classList.add("active");
 });
 
 const Legs = {
@@ -136,6 +136,7 @@ const animateLeftLeg = (callback) => {
   if (rightLegAnimated || lastAnimatedLeg == Legs.left) return;
   leftLegAnimated = true;
   ctx.save();
+  //const imageData = ctx.getImageData(0,0, canvas.w);
   ctx.beginPath();
   for (let point of leg1) {
     ctx.lineTo(point.x, point.y);
@@ -197,48 +198,54 @@ window.addEventListener("resize", () => {
 
 const startDraw = () => {
   //   ctx.strokeStyle = "green";
-  if(!drawMode) return
+  if (!drawMode) return;
   ctx.beginPath();
   ctx.setLineDash([]);
   canvas.addEventListener("mousemove", draw);
+  canvas.addEventListener("touchmove", draw);
 };
 
 const stopDraw = () => {
   canvas.removeEventListener("mousemove", draw);
-  ctx.save()
-  ctx.beginPath();
-
+  canvas.removeEventListener("touchmove", draw);
+  //   ctx.save()
+  //ctx.beginPath();
 };
 
-const isOutsideContour = () => {
-    let inside = isInsideCircle(490, 355, 220)
-    if (inside) return !inside
-    inside = isInsideCircle(238, 435, 100)
-    if (inside) return !inside
-    return !isInsideCircle(60, 355, 30)
+const isOutsideContour = (x, y) => {
+  let inside = isInsideCircle(x, y, 490, 335, 240);
+  if (inside) return !inside;
+  inside = isInsideCircle(x, y, 238, 425, 100);
+  if (inside) return !inside;
+  return !isInsideCircle(x, y, 60, 355, 30);
 };
 
-const isInsideCircle = (x, y, radius) => {
-    return Math.pow(event.clientX - x, 2) + Math.pow(event.clientY - y, 2) < Math.pow(radius, 2)
-}
+const isInsideCircle = (x, y, circleX, circleY, radius) => {
+  return (
+    Math.pow(x - circleX, 2) + Math.pow(y - circleY, 2) < Math.pow(radius, 2)
+  );
+};
 
 const draw = (event) => {
-  console.log(event.clientX, event.clientY);
-  var bounding = canvas.getBoundingClientRect();
-  var x = event.clientX - bounding.left;
-  var y = event.clientY - bounding.top;
+  let x, y;
+  if (event.type == "mousemove") {
+    var bounding = canvas.getBoundingClientRect();
+    x = event.clientX - bounding.left;
+    y = event.clientY - bounding.top;
+  } else {
+    const touch = event.touches[0];
+    x = touch.pageX;
+    y = touch.pageY;
+  }
+  console.log(x, y);
 
-  if (isOutsideContour()) return;
-  //   if (
-  //     Math.pow(event.clientX - 60, 2) + Math.pow(event.clientY - 325, 2) >
-  //     30 * 30
-  //   ) {
-  //     console.log("outside");
-  //   } else {
+  if (isOutsideContour(x, y)) return;
   ctx.lineTo(x, y);
   ctx.stroke();
-  //   }
 };
 
 canvas.addEventListener("mouseup", stopDraw);
 canvas.addEventListener("mousedown", startDraw);
+
+canvas.addEventListener("touchstart", startDraw);
+canvas.addEventListener("touchend", stopDraw);
