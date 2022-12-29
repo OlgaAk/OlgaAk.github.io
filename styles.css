@@ -3,6 +3,9 @@
     display: flex;
 }
 
+#actionButtons button{
+    margin-left: 10px;
+}
 
 #palette {
     margin-left: 600px;

@@ -1,6 +1,10 @@
 const animateBtn = document.getElementById("animateBtn");
 const drawBtn = document.getElementById("drawBtn");
-let drawMode = false;
+const redBtn = document.getElementById("red");
+const yellowBtn = document.getElementById("yellow");
+const greenBtn = document.getElementById("green");
+
+let drawMode = true;
 
 const leg1 = [
   {
@@ -42,8 +46,6 @@ const leg2 = [
   },
 ];
 
-
-
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -81,7 +83,22 @@ animateBtn.addEventListener("click", () => {
 
 drawBtn.addEventListener("click", () => {
   drawMode = true;
-  drawNose()
+  //   drawNose()
+});
+
+redBtn.addEventListener("click", () => {
+  if (!drawMode) return;
+  ctx.strokeStyle = "red";
+});
+
+yellowBtn.addEventListener("click", () => {
+  if (!drawMode) return;
+  ctx.strokeStyle = "yellow";
+});
+
+greenBtn.addEventListener("click", () => {
+  if (!drawMode) return;
+  ctx.strokeStyle = "green";
 });
 
 const Legs = {
@@ -161,7 +178,7 @@ window.addEventListener("resize", () => {
 });
 
 const startDraw = () => {
-  ctx.strokeStyle = "green";
+  //   ctx.strokeStyle = "green";
   ctx.setLineDash([]);
   canvas.addEventListener("mousemove", draw);
 };
@@ -171,18 +188,26 @@ const stopDraw = () => {
   ctx.beginPath();
 };
 
+const isOutsideContour = () => {
+  return false;
+};
+
 const draw = (event) => {
   console.log(event.clientX, event.clientY);
+  var bounding = canvas.getBoundingClientRect();
+  var x = event.clientX - bounding.left;
+  var y = event.clientY - bounding.top;
 
-  if (
-    Math.pow(event.clientX - 60, 2) + Math.pow(event.clientY - 325, 2) >
-    30 * 30
-  ) {
-    console.log("outside");
-  } else {
-    ctx.lineTo(event.clientX, event.clientY);
-    ctx.stroke();
-  }
+  if (isOutsideContour()) return;
+  //   if (
+  //     Math.pow(event.clientX - 60, 2) + Math.pow(event.clientY - 325, 2) >
+  //     30 * 30
+  //   ) {
+  //     console.log("outside");
+  //   } else {
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  //   }
 };
 
 canvas.addEventListener("mouseup", stopDraw);
