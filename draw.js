@@ -148,15 +148,15 @@ const animateLeftLeg = (callback) => {
   ctx.closePath();
   ctx.clip();
 
-  ctx.scale(-1, 1);
+  ctx.rotate((-1 * Math.PI) / 180);
   if (savedCanvasImage) {
     createImageBitmap(savedCanvasImage).then(imageBitmap => {
-        console.log(-img.width)
-    ctx.drawImage(imageBitmap, 0, 0, img.width, img.height, 0, 0, -img.width, img.height);
+    
+    ctx.drawImage(imageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
     })
 } else {
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, -800, 600);
-}
+  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+  }
   setTimeout(() => {
     ctx.restore();
     if (savedCanvasImage) {
