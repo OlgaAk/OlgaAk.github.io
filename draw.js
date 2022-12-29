@@ -137,7 +137,10 @@ const animateLeftLeg = (callback) => {
   console.log("rightLegAnimated " + rightLegAnimated);
   console.log("lastAnimatedLeg == Legs.left " + lastAnimatedLeg == Legs.left);
   console.log(lastAnimatedLeg, Legs.left);
-  if (rightLegAnimated || lastAnimatedLeg == Legs.left) return;
+  if (rightLegAnimated || lastAnimatedLeg == Legs.left) {
+    window.requestAnimationFrame(animateLeftLeg);
+    return
+  };
   leftLegAnimated = true;
   ctx.save();
 
@@ -196,7 +199,10 @@ const animateRightLeg = (callback) => {
   if (drawMode) return;
   console.log("leftLegAnimated " + leftLegAnimated);
   console.log("lastAnimatedLeg == Legs.right " + lastAnimatedLeg == Legs.right);
-  if (leftLegAnimated || lastAnimatedLeg == Legs.right) return;
+  if (leftLegAnimated || lastAnimatedLeg == Legs.right) {
+    window.requestAnimationFrame(animateRightLeg);
+    return
+};
 
   rightLegAnimated = true;
   ctx.save();
