@@ -6,6 +6,7 @@ const greenBtn = document.getElementById("green");
 const palette = document.getElementById("palette");
 
 let savedCanvasImage = null;
+let savedImageBitmap = null;
 
 let drawMode = true;
 
@@ -149,20 +150,19 @@ const animateLeftLeg = (callback) => {
   ctx.clip();
 
   ctx.rotate((-1 * Math.PI) / 180);
-  if (savedCanvasImage) {
-    createImageBitmap(savedCanvasImage).then(imageBitmap => {
+  if (savedCanvasImage && savedImageBitmap) {
     
-    ctx.drawImage(imageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-    })
+    ctx.drawImage(savedImageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+
 } else {
   ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
   }
   setTimeout(() => {
     ctx.restore();
-    if (savedCanvasImage) {
-        createImageBitmap(savedCanvasImage).then(imageBitmap => {
-            ctx.drawImage(imageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
-        })
+    if (savedCanvasImage && savedImageBitmap) {
+       
+            ctx.drawImage(savedImageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
+
           
     } else {
         ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
@@ -194,11 +194,11 @@ const animateRightLeg = (callback) => {
   ctx.clip();
 
   ctx.rotate((-1 * Math.PI) / 180);
-  if (savedCanvasImage) {
-    createImageBitmap(savedCanvasImage).then(imageBitmap => {
+  if (savedCanvasImage && savedImageBitmap) {
+  
     
-    ctx.drawImage(imageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-    })
+    ctx.drawImage(savedImageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+
 } else {
   ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
   }
@@ -206,9 +206,9 @@ const animateRightLeg = (callback) => {
   setTimeout(() => {
     ctx.restore();
     if (savedCanvasImage) {
-        createImageBitmap(savedCanvasImage).then(imageBitmap => {
-        ctx.drawImage(imageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
-        })
+      
+        ctx.drawImage(savedImageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
+
   } else {
     ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
   }
@@ -242,6 +242,9 @@ const stopDraw = () => {
 
 const saveCanvasImage = () => {
    savedCanvasImage = ctx.getImageData(0,0, canvas.width, canvas.height);
+   createImageBitmap(savedCanvasImage).then(imageBitmap => {
+    savedImageBitmap = imageBitmap;
+})
 }
 
 const isOutsideContour = (x, y) => {
