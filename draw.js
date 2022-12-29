@@ -65,7 +65,6 @@ img.src = "./hedgehog.jpg";
 
 img.onload = function (e) {
   ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
-  savedCanvasImage = img;
 };
 
 const drawNose = () => {
@@ -140,7 +139,7 @@ const animateLeftLeg = (callback) => {
   if (rightLegAnimated || lastAnimatedLeg == Legs.left) return;
   leftLegAnimated = true;
   ctx.save();
-  //const imageData = ctx.getImageData(0,0, canvas.w);
+
   ctx.beginPath();
   for (let point of leg1) {
     ctx.lineTo(point.x, point.y);
@@ -150,11 +149,25 @@ const animateLeftLeg = (callback) => {
   ctx.clip();
 
   ctx.scale(-1, 1);
-  ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, -800, 600);
-
+  if (savedCanvasImage) {
+    createImageBitmap(savedCanvasImage).then(imageBitmap => {
+        console.log(-img.width)
+    ctx.drawImage(imageBitmap, 0, 0, img.width, img.height, 0, 0, -img.width, img.height);
+    })
+} else {
+  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, -800, 600);
+}
   setTimeout(() => {
     ctx.restore();
-    ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    if (savedCanvasImage) {
+        createImageBitmap(savedCanvasImage).then(imageBitmap => {
+            ctx.drawImage(imageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
+        })
+          
+    } else {
+        ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    }
+
     leftLegAnimated = false;
     lastAnimatedLeg = Legs.left;
 
@@ -181,11 +194,24 @@ const animateRightLeg = (callback) => {
   ctx.clip();
 
   ctx.rotate((-1 * Math.PI) / 180);
-  ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, 800, 600);
+  if (savedCanvasImage) {
+    createImageBitmap(savedCanvasImage).then(imageBitmap => {
+    
+    ctx.drawImage(imageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+    })
+} else {
+  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+  }
 
   setTimeout(() => {
     ctx.restore();
-    ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    if (savedCanvasImage) {
+        createImageBitmap(savedCanvasImage).then(imageBitmap => {
+        ctx.drawImage(imageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
+        })
+  } else {
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+  }
     rightLegAnimated = false;
     lastAnimatedLeg = Legs.right;
 
@@ -215,11 +241,7 @@ const stopDraw = () => {
 };
 
 const saveCanvasImage = () => {
-    const savedImage = canvas.toDataURL("image/jpg").replace("image/jpg", "image/octet-stream");
-    console.log(savedImage)
-    if (savedImage) {
-        savedCanvasImage = savedImage;
-    }
+   savedCanvasImage = ctx.getImageData(0,0, canvas.width, canvas.height);
 }
 
 const isOutsideContour = (x, y) => {
