@@ -197,7 +197,6 @@ window.addEventListener("resize", () => {
 });
 
 const startDraw = () => {
-  //   ctx.strokeStyle = "green";
   if (!drawMode) return;
   ctx.beginPath();
   ctx.setLineDash([]);
@@ -208,8 +207,6 @@ const startDraw = () => {
 const stopDraw = () => {
   canvas.removeEventListener("mousemove", draw);
   canvas.removeEventListener("touchmove", draw);
-  //   ctx.save()
-  //ctx.beginPath();
 };
 
 const isOutsideContour = (x, y) => {
