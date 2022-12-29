@@ -5,6 +5,8 @@ const yellowBtn = document.getElementById("yellow");
 const greenBtn = document.getElementById("green");
 const palette = document.getElementById("palette");
 
+let savedCanvasImage = null;
+
 let drawMode = true;
 
 const leg1 = [
@@ -58,10 +60,12 @@ ctx.strokeStyle = "green";
 ctx.lineWidth = 15;
 
 const img = new Image();
+
 img.src = "./hedgehog.jpg";
 
 img.onload = function (e) {
   ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+  savedCanvasImage = img;
 };
 
 const drawNose = () => {
@@ -146,11 +150,11 @@ const animateLeftLeg = (callback) => {
   ctx.clip();
 
   ctx.scale(-1, 1);
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, -800, 600);
+  ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, -800, 600);
 
   setTimeout(() => {
     ctx.restore();
-    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, 800, 600);
     leftLegAnimated = false;
     lastAnimatedLeg = Legs.left;
 
@@ -177,11 +181,11 @@ const animateRightLeg = (callback) => {
   ctx.clip();
 
   ctx.rotate((-1 * Math.PI) / 180);
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+  ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, 800, 600);
 
   setTimeout(() => {
     ctx.restore();
-    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    ctx.drawImage(savedCanvasImage, 0, 0, img.width, img.height, 0, 0, 800, 600);
     rightLegAnimated = false;
     lastAnimatedLeg = Legs.right;
 
@@ -207,7 +211,16 @@ const startDraw = () => {
 const stopDraw = () => {
   canvas.removeEventListener("mousemove", draw);
   canvas.removeEventListener("touchmove", draw);
+  saveCanvasImage();
 };
+
+const saveCanvasImage = () => {
+    const savedImage = canvas.toDataURL("image/jpg").replace("image/jpg", "image/octet-stream");
+    console.log(savedImage)
+    if (savedImage) {
+        saveCanvasImage = savedImage;
+    }
+}
 
 const isOutsideContour = (x, y) => {
   let inside = isInsideCircle(x, y, 490, 335, 240);
