@@ -151,21 +151,36 @@ const animateLeftLeg = (callback) => {
 
   ctx.rotate((-1 * Math.PI) / 180);
   if (savedCanvasImage && savedImageBitmap) {
-    
-    ctx.drawImage(savedImageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-
-} else {
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    ctx.drawImage(
+      savedImageBitmap,
+      0,
+      0,
+      img.width,
+      img.height,
+      0,
+      0,
+      img.width,
+      img.height
+    );
+  } else {
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
   }
   setTimeout(() => {
     ctx.restore();
     if (savedCanvasImage && savedImageBitmap) {
-       
-            ctx.drawImage(savedImageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
-
-          
+      ctx.drawImage(
+        savedImageBitmap,
+        0,
+        0,
+        img.width,
+        img.height,
+        0,
+        0,
+        img.width,
+        img.height
+      );
     } else {
-        ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+      ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
     }
 
     leftLegAnimated = false;
@@ -195,23 +210,38 @@ const animateRightLeg = (callback) => {
 
   ctx.rotate((-1 * Math.PI) / 180);
   if (savedCanvasImage && savedImageBitmap) {
-  
-    
-    ctx.drawImage(savedImageBitmap, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-
-} else {
-  ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    ctx.drawImage(
+      savedImageBitmap,
+      0,
+      0,
+      img.width,
+      img.height,
+      0,
+      0,
+      img.width,
+      img.height
+    );
+  } else {
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
   }
 
   setTimeout(() => {
     ctx.restore();
     if (savedCanvasImage) {
-      
-        ctx.drawImage(savedImageBitmap, 0,0, img.width, img.height, 0, 0, img.width, img.height);
-
-  } else {
-    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
-  }
+      ctx.drawImage(
+        savedImageBitmap,
+        0,
+        0,
+        img.width,
+        img.height,
+        0,
+        0,
+        img.width,
+        img.height
+      );
+    } else {
+      ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
+    }
     rightLegAnimated = false;
     lastAnimatedLeg = Legs.right;
 
@@ -241,11 +271,11 @@ const stopDraw = () => {
 };
 
 const saveCanvasImage = () => {
-   savedCanvasImage = ctx.getImageData(0,0, canvas.width, canvas.height);
-   createImageBitmap(savedCanvasImage).then(imageBitmap => {
+  savedCanvasImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  createImageBitmap(savedCanvasImage).then((imageBitmap) => {
     savedImageBitmap = imageBitmap;
-})
-}
+  });
+};
 
 const isOutsideContour = (x, y) => {
   let inside = isInsideCircle(x, y, 490, 335, 240);
