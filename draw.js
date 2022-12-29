@@ -55,6 +55,7 @@ ctx.canvas.height = window.innerHeight;
 
 ctx.lineWidth = "5";
 ctx.strokeStyle = "green";
+ctx.lineWidth = 15;
 
 const img = new Image();
 img.src = "./hedgehog.jpg";
@@ -210,8 +211,16 @@ const stopDraw = () => {
 };
 
 const isOutsideContour = () => {
-  return false;
+    let inside = isInsideCircle(490, 355, 220)
+    if (inside) return !inside
+    inside = isInsideCircle(238, 435, 100)
+    if (inside) return !inside
+    return !isInsideCircle(60, 355, 30)
 };
+
+const isInsideCircle = (x, y, radius) => {
+    return Math.pow(event.clientX - x, 2) + Math.pow(event.clientY - y, 2) < Math.pow(radius, 2)
+}
 
 const draw = (event) => {
   console.log(event.clientX, event.clientY);
