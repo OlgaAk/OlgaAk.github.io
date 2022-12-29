@@ -3,6 +3,7 @@ const drawBtn = document.getElementById("drawBtn");
 const redBtn = document.getElementById("red");
 const yellowBtn = document.getElementById("yellow");
 const greenBtn = document.getElementById("green");
+const palette = document.getElementById("palette");
 
 let drawMode = true;
 
@@ -76,29 +77,45 @@ const drawNose = () => {
 };
 
 animateBtn.addEventListener("click", () => {
+    if(!drawMode) return
   drawMode = false;
+  drawBtn.classList.remove("disabled")
+  animateBtn.classList.add("disabled")
+  palette.classList.add("hidden")
   animateLeftLeg();
   setTimeout(animateRightLeg, 100);
 });
 
 drawBtn.addEventListener("click", () => {
   drawMode = true;
+  drawBtn.classList.add("disabled")
+  animateBtn.classList.remove("disabled")
+  palette.classList.remove("hidden")
   //   drawNose()
 });
 
 redBtn.addEventListener("click", () => {
   if (!drawMode) return;
   ctx.strokeStyle = "red";
+  redBtn.classList.add("active")
+  yellowBtn.classList.remove("active")
+  greenBtn.classList.remove("active")
 });
 
 yellowBtn.addEventListener("click", () => {
   if (!drawMode) return;
   ctx.strokeStyle = "yellow";
+  redBtn.classList.remove("active")
+  yellowBtn.classList.add("active")
+  greenBtn.classList.remove("active")
 });
 
 greenBtn.addEventListener("click", () => {
   if (!drawMode) return;
   ctx.strokeStyle = "green";
+  redBtn.classList.remove("active")
+  yellowBtn.classList.remove("active")
+  greenBtn.classList.add("active")
 });
 
 const Legs = {
@@ -179,13 +196,17 @@ window.addEventListener("resize", () => {
 
 const startDraw = () => {
   //   ctx.strokeStyle = "green";
+  if(!drawMode) return
+  ctx.beginPath();
   ctx.setLineDash([]);
   canvas.addEventListener("mousemove", draw);
 };
 
 const stopDraw = () => {
   canvas.removeEventListener("mousemove", draw);
+  ctx.save()
   ctx.beginPath();
+
 };
 
 const isOutsideContour = () => {

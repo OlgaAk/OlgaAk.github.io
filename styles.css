@@ -7,6 +7,10 @@
     margin-left: 10px;
 }
 
+#actionButtons button.disabled{
+    opacity: 0.3;
+}
+
 #palette {
     margin-left: 600px;
 }
@@ -17,6 +21,10 @@
   height: 20px;
   border-radius: 50%;
   display: inline-block;
+}
+
+.hidden {
+    display: none;
 }
 
 #red {
@@ -31,3 +39,6 @@
     background-color: green;
   }
 
+  #palette span.active {
+    border: black 1px solid;
+  }
