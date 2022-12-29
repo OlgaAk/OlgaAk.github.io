@@ -1,5 +1,6 @@
 const animateBtn = document.getElementById("animateBtn");
 const drawBtn = document.getElementById("drawBtn");
+let drawMode = false;
 
 const leg1 = [
   {
@@ -41,9 +42,7 @@ const leg2 = [
   },
 ];
 
-// endPathBtn.addEventListener("click", () => {
-//     console.log(leg1)
-// })
+
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -59,19 +58,31 @@ img.src = "./hedgehog.jpg";
 
 img.onload = function (e) {
   ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 800, 600);
-  //     ctx.beginPath()
-  //     ctx.fillStyle = 'rgba(0,0,0,0.1)';
-  //     ctx.strokeStyle = 'yellow';
-  //     ctx.setLineDash([5, 3]);/*dashes are 5px and spaces are 3px*/
-  // ctx.arc(60, 325, 30, 0, 2 * Math.PI);
+};
 
-  // ctx.stoke()
-  // ctx.fill()
+const drawNose = () => {
+  ctx.beginPath();
+  ctx.fillStyle = "rgba(0,0,0,0.1)";
+  ctx.strokeStyle = "yellow";
+  ctx.setLineDash([5, 3]); /*dashes are 5px and spaces are 3px*/
+  ctx.arc(60, 325, 30, 0, 2 * Math.PI);
 
-  // ctx.clip();
+  ctx.stoke();
+  ctx.fill();
+
+  ctx.clip();
+};
+
+animateBtn.addEventListener("click", () => {
+  drawMode = false;
   animateLeftLeg();
   setTimeout(animateRightLeg, 100);
-};
+});
+
+drawBtn.addEventListener("click", () => {
+  drawMode = true;
+  drawNose()
+});
 
 const Legs = {
   right: "right",
@@ -83,6 +94,7 @@ let lastAnimatedLeg;
 let rightLegAnimated = false;
 
 const animateLeftLeg = (callback) => {
+  if (drawMode) return;
   console.log("rightLegAnimated " + rightLegAnimated);
   console.log("lastAnimatedLeg == Legs.left " + lastAnimatedLeg == Legs.left);
   console.log(lastAnimatedLeg, Legs.left);
@@ -113,6 +125,7 @@ const animateLeftLeg = (callback) => {
 };
 
 const animateRightLeg = (callback) => {
+  if (drawMode) return;
   console.log("leftLegAnimated " + leftLegAnimated);
   console.log("lastAnimatedLeg == Legs.right " + lastAnimatedLeg == Legs.right);
   if (leftLegAnimated || lastAnimatedLeg == Legs.right) return;

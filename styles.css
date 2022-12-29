@@ -1,0 +1,30 @@
+#header {
+    width: 100%;
+    display: flex;
+}
+
+
+#palette {
+    margin-left: 600px;
+}
+
+#palette span {
+    padding: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#red {
+  background-color: red;
+}
+
+#yellow {
+  background-color: yellow;
+}
+
+#green {
+    background-color: green;
+  }
+
